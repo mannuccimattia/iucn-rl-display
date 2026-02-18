@@ -38,7 +38,7 @@ class IucnService
                     ['taxon_id' => 18588, 'scientific_name' => 'Cetorhinus maximus', 'category_code' => 'EN', 'published_year' => 2021, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '39252391', 'iucn_url' => 'https://www.iucnredlist.org/species/18588/39252391'],
                 ],
                 'terrestrial' => [
-                    ['taxon_id' => 9449, 'scientific_name' => 'Gorilla beringei', 'category_code' => 'CR', 'published_year' => 2020, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '39252391', 'iucn_url' => 'https://www.iucnredlist.org/species/9449/39252391'],
+                    ['taxon_id' => null, 'scientific_name' => 'Gorilla beringei', 'category_code' => 'CR', 'published_year' => 2020, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '39252391', 'iucn_url' => 'https://www.iucnredlist.org/species/9449/39252391'],
                     ['taxon_id' => 15951, 'scientific_name' => 'Panthera uncia', 'category_code' => 'VU', 'published_year' => 2017, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '55443503', 'iucn_url' => 'https://www.iucnredlist.org/species/15951/55443503'],
                     ['taxon_id' => 22823, 'scientific_name' => 'Diceros bicornis', 'category_code' => 'CR', 'published_year' => 2020, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '6557', 'iucn_url' => 'https://www.iucnredlist.org/species/22823/6557'],
                 ],

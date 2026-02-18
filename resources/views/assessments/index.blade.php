@@ -1,8 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-main-contrast leading-tight">
-            Visualizzazione per <p class="inline font-bold text-main-emphasis">{{ $title }}
-            </p>
+            Visualizzazione per <span class="font-bold text-main-emphasis">{{ $title }}
+            </span>
         </h2>
     </x-slot>
 
@@ -19,31 +19,43 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
                     @foreach ($items as $item)
-                        <div class="bg-main-light p-6 rounded-lg shadow cursor-pointer hover:ring-2 hover:ring-main-emphasis transition-all"
-                            onclick="if(!event.target.closest('a')) window.location='{{ route('assessments.show', ['type' => $type, 'id' => $id, 'taxon_id' => $item['taxon_id']]) }}'">
+                        <div
+                            class="bg-main-light p-6 rounded-lg shadow hover:ring-2 hover:ring-main-emphasis duration-150 transition-all">
                             <h3 class="text-xl font-bold italic">{{ $item['scientific_name'] }}</h3>
 
                             <div class="flex justify-between items-center mb-4">
-                                <div>
-                                    <p class="text-sm text-gray-300">ID Valutazione: {{ $item['assessment_id'] }}</p>
-                                </div>
-                                <span class="px-3 py-1 rounded text-xs font-bold bg-main">
-                                    {{ __($item['category_code']) }}
+                                <span class="text-sm text-gray-300">
+                                    ID Valutazione: {{ $item['assessment_id'] }}
+                                </span>
+                                <span
+                                    class="px-3 py-1 rounded text-xs font-bold bg-main">{{ __($item['category_code']) }}
                                 </span>
                             </div>
 
                             <div class="space-y-1 text-sm text-gray-400">
-                                <p><strong>Anno:</strong> {{ $item['published_year'] }}</p>
-                                <p><strong>Possibile Estinto:</strong> {{ $item['is_possibly_extinct'] ? 'Sì' : 'No' }}
+                                <p><strong>Anno:</strong>
+                                    {{ $item['published_year'] }}
+                                </p>
+                                <p><strong>Possibile Estinto:</strong>
+                                    {{ $item['is_possibly_extinct'] ? 'Sì' : 'No' }}
                                 </p>
                                 <p><strong>Possibile Estinto in Natura:</strong>
                                     {{ $item['is_possibly_extinct_in_wild'] ? 'Sì' : 'No' }}</p>
                             </div>
 
-                            <div class="mt-4 pt-4 border-t border-main-emphasis">
+                            <div class="mt-4 pt-4 border-t border-main-emphasis flex justify-between">
+                                @if ($item['taxon_id'])
+                                    <x-link :href="route('assessments.show', [
+                                        'type' => $type,
+                                        'id' => $id,
+                                        'taxon_id' => $item['taxon_id'],
+                                    ])" class="hover:underline text-sm font-bold relative">
+                                        Vedi Dettagli<i class="ms-1 text-xs fa-solid fa-arrow-right"></i>
+                                    </x-link>
+                                @endif
                                 <x-link :href="$item['iucn_url']" target="_blank"
-                                    class="hover:underline text-sm font-bold relative z-10">
-                                    Vedi Scheda Ufficiale →
+                                    class="hover:underline text-sm font-bold relative ms-auto">
+                                    Scheda Ufficiale<i class="ms-1 text-xs fa-solid fa-up-right-from-square"></i>
                                 </x-link>
                             </div>
                         </div>
