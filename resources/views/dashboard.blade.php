@@ -12,18 +12,22 @@
                     <div class="flex flex-col justify-center items-center gap-y-2">
                         <h3 class="px-40 py-2 rounded-lg bg-main text-main-contrast">Sistemi</h3>
                         <div class="flex flex-row gap-x-5">
-                            <x-link :href="route('assessments.index', ['type' => 'system', 'id' => 'terrestrial'])">Terrestre</x-link>
-                            <x-link :href="route('assessments.index', ['type' => 'system', 'id' => 'marine'])">Marino</x-link>
-                            <x-link :href="route('assessments.index', ['type' => 'system', 'id' => 'freshwater'])">Acque Dolci</x-link>
+                            @foreach ($systems as $key => $value)
+                                <x-link :href="route('assessments.index', ['type' => 'system', 'id' => $key])">
+                                    {{ $value }}
+                                </x-link>
+                            @endforeach
                         </div>
                     </div>
                     <hr>
                     <div class="flex flex-col justify-center items-center gap-y-2">
                         <h3 class="px-40 py-2 rounded-lg bg-main text-main-contrast">Nazioni</h3>
                         <div class="flex flex-row gap-x-5">
-                            <x-link :href="route('assessments.index', ['type' => 'country', 'id' => 'IT'])">Italia</x-link>
-                            <x-link :href="route('assessments.index', ['type' => 'country', 'id' => 'FR'])">Francia</x-link>
-                            <x-link :href="route('assessments.index', ['type' => 'country', 'id' => 'ES'])">Spagna</x-link>
+                            @foreach ($countries as $country)
+                                <x-link :href="route('assessments.index', ['type' => 'country', 'id' => $country])">
+                                    {{ $country }}
+                                </x-link>
+                            @endforeach
                         </div>
                     </div>
                 </div>

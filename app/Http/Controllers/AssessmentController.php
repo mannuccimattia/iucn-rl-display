@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\IucnService;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class AssessmentController extends Controller
 {
-    public function index(string $type, string $id)
+    public function index(string $type, string $id, IucnService $service): View
     {
-        $systems = [
-            'terrestrial' => 'Terrestre',
-            'marine' => 'Marino',
-            'freshwater' => 'Acque Dolci'
-        ];
+        $systems = $service->getSystems();
 
         $title = ($type === 'system')
             ? $systems[$id]
@@ -22,10 +20,7 @@ class AssessmentController extends Controller
             'type' => $type,
             'id' => $id,
             'title' => ($type === 'system') ? "Sistema: $title" : "Nazione: $title",
-            'items' => [
-                ['taxon_id' => 123, 'scientific_name' => 'Lorem voluptus', 'category' => 'VU'],
-                ['taxon_id' => 456, 'scientific_name' => 'Dolor eliquiscit', 'category' => 'EN'],
-            ]
+            'items' => $service->getAssessments($type, $id),
         ];
 
         return view('assessments.index', $viewData);
