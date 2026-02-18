@@ -20,7 +20,7 @@ export default {
                     light: '#414141',
                     dark: '#212121',
                     contrast: '#fafafa',
-                    emphasis: '#b91c1c',
+                    emphasis: '#dc2626',
                 }
             }
         },

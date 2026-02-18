@@ -1,11 +1,20 @@
 <?php
 
+use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::get('favourites', function () {
+    return view('favourites');
+})->name('favourites');
+
+Route::get('/assessments/{type}/{id}', [AssessmentController::class, 'index'])
+    ->where('type', 'system|country')
+    ->name('assessments.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
