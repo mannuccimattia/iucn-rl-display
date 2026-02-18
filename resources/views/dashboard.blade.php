@@ -12,9 +12,9 @@
                     <div class="flex flex-col justify-center items-center gap-y-2">
                         <h3 class="px-40 py-2 rounded-lg bg-main text-main-contrast">Sistemi</h3>
                         <div class="flex flex-row gap-x-5">
-                            @foreach ($systems as $key => $value)
-                                <x-link :href="route('assessments.index', ['type' => 'system', 'id' => $key])">
-                                    {{ $value }}
+                            @foreach ($systems as $system)
+                                <x-link :href="route('assessments.index', ['type' => 'system', 'id' => $system])">
+                                    {{ __($system) }}
                                 </x-link>
                             @endforeach
                         </div>
@@ -25,7 +25,7 @@
                         <div class="flex flex-row gap-x-5">
                             @foreach ($countries as $country)
                                 <x-link :href="route('assessments.index', ['type' => 'country', 'id' => $country])">
-                                    {{ $country }}
+                                    {{ __($country) }}
                                 </x-link>
                             @endforeach
                         </div>

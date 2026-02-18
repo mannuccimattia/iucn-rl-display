@@ -10,11 +10,7 @@ class AssessmentController extends Controller
 {
     public function index(string $type, string $id, IucnService $service): View
     {
-        $systems = $service->getSystems();
-
-        $title = ($type === 'system')
-            ? $systems[$id]
-            : $id;
+        $title = __($id);
 
         $viewData = [
             'type' => $type,

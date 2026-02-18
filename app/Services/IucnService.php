@@ -9,11 +9,12 @@ class IucnService
      */
     public function getSystems(): array
     {
-        return [
-            'terrestrial' => 'Terrestre',
-            'marine' => 'Marino',
-            'freshwater' => 'Acque Dolci'
-        ];
+        return ['terrestrial', 'marine', 'freshwater'];
+        // return [
+        //     'terrestrial' => 'Terrestre',
+        //     'marine' => 'Marino',
+        //     'freshwater' => 'Acque Dolci'
+        // ];
     }
 
     /**
