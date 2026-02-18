@@ -16,16 +16,16 @@
                     <h3 class="text-lg font-bold">Risultati della ricerca</h3>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    @forelse($items as $item)
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    @foreach ($items as $item)
                         <div class="bg-main-light p-6 rounded-lg shadow">
-                            <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-bold italic">{{ $item['scientific_name'] }}</h3>
+                            <div class="flex justify-between items-center mb-4">
                                 <div>
-                                    <h3 class="text-xl font-bold italic">{{ $item['scientific_name'] }}</h3>
                                     <p class="text-sm text-gray-300">ID Valutazione: {{ $item['assessment_id'] }}</p>
                                 </div>
-                                <span class="px-3 py-1 rounded text-sm font-bold bg-main">
-                                    {{ $item['category_code'] }}
+                                <span class="px-3 py-1 rounded text-xs font-bold bg-main">
+                                    {{ __($item['category_code']) }}
                                 </span>
                             </div>
 
@@ -43,9 +43,7 @@
                                 </x-link>
                             </div>
                         </div>
-                    @empty
-                        <p class="col-span-2 text-center text-gray-500 italic">Nessun dato disponibile.</p>
-                    @endforelse
+                    @endforeach
                 </div>
             </div>
         </div>

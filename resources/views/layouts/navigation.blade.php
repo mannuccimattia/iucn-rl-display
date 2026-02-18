@@ -95,7 +95,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 Home
             </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('favourites')" :active="request()->routeIs('favourites')">
+                Preferiti
+            </x-responsive-nav-link>
         </div>
+
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
