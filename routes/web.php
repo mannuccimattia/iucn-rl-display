@@ -12,9 +12,13 @@ Route::get('favourites', function () {
     return view('favourites');
 })->name('favourites');
 
+
 Route::get('/assessments/{type}/{id}', [AssessmentController::class, 'index'])
     ->where('type', 'system|country')
     ->name('assessments.index');
+
+Route::get('/assessments/{type}/{id}/{taxon_id}', [AssessmentController::class, 'show'])
+    ->name('assessments.show');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

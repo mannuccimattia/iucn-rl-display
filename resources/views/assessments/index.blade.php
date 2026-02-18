@@ -17,9 +17,12 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+
                     @foreach ($items as $item)
-                        <div class="bg-main-light p-6 rounded-lg shadow">
+                        <div class="bg-main-light p-6 rounded-lg shadow cursor-pointer hover:ring-2 hover:ring-main-emphasis transition-all"
+                            onclick="if(!event.target.closest('a')) window.location='{{ route('assessments.show', ['type' => $type, 'id' => $id, 'taxon_id' => $item['taxon_id']]) }}'">
                             <h3 class="text-xl font-bold italic">{{ $item['scientific_name'] }}</h3>
+
                             <div class="flex justify-between items-center mb-4">
                                 <div>
                                     <p class="text-sm text-gray-300">ID Valutazione: {{ $item['assessment_id'] }}</p>
@@ -38,12 +41,14 @@
                             </div>
 
                             <div class="mt-4 pt-4 border-t border-main-emphasis">
-                                <x-link :href="$item['iucn_url']" target="_blank" class="hover:underline text-sm font-bold">
+                                <x-link :href="$item['iucn_url']" target="_blank"
+                                    class="hover:underline text-sm font-bold relative z-10">
                                     Vedi Scheda Ufficiale →
                                 </x-link>
                             </div>
                         </div>
                     @endforeach
+
                 </div>
             </div>
         </div>

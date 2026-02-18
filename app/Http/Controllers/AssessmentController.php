@@ -21,4 +21,15 @@ class AssessmentController extends Controller
 
         return view('assessments.index', $viewData);
     }
+
+    public function show(string $type, string $id, int $taxon_id, IucnService $service): View
+    {
+        $items = $service->getAssessments($type, $id);
+
+        $item = collect($items)->firstWhere('taxon_id', $taxon_id);
+
+        if (!$item) abort(404);
+
+        return view('assessments.show', compact('item', 'type', 'id'));
+    }
 }
