@@ -19,8 +19,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
                     @foreach ($items as $item)
-                        <div
-                            class="bg-main-light p-6 rounded-lg shadow hover:ring-2 hover:ring-main-emphasis duration-150 transition-all">
+                        <x-card class="shadow duration-150 transition-all">
                             <h3 class="text-xl font-bold italic">{{ $item['scientific_name'] }}</h3>
 
                             <div class="flex justify-between items-center mb-4">
@@ -58,7 +57,7 @@
                                     Scheda Ufficiale<i class="ms-1 text-xs fa-solid fa-up-right-from-square"></i>
                                 </x-link>
                             </div>
-                        </div>
+                        </x-card>
                     @endforeach
 
                 </div>

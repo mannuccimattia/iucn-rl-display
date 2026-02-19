@@ -13,8 +13,8 @@
                         <h3 class="text-xl font-bold pb-3">Sistemi</h3>
                         <div class="flex flex-row gap-x-5">
                             @foreach ($systems as $system)
-                                <x-link class="bg-main-light hover:bg-red-200 px-4 py-2 rounded" :href="route('assessments.index', ['type' => 'system', 'id' => $system])">
-                                    {{ __($system) }}
+                                <x-link :href="route('assessments.index', ['type' => 'system', 'id' => $system])">
+                                    <x-card class="uppercase text-xs">{{ __($system) }}</x-card>
                                 </x-link>
                             @endforeach
                         </div>
@@ -24,8 +24,11 @@
                         <h3 class="text-xl font-bold pb-3">Nazioni</h3>
                         <div class="flex flex-row gap-x-5">
                             @foreach ($countries as $country)
-                                <x-link class="bg-main-light hover:bg-red-200 px-4 py-2 rounded" :href="route('assessments.index', ['type' => 'country', 'id' => $country])">
-                                    {{ __($country) }}
+                                <x-link :href="route('assessments.index', ['type' => 'country', 'id' => $country])">
+                                    <x-card class="uppercase text-xs flex flex-col items-center">
+                                        <span>flag</span>
+                                        <span>{{ __($country) }}</span>
+                                    </x-card>
                                 </x-link>
                             @endforeach
                         </div>
