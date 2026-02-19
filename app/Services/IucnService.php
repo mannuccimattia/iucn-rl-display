@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\DTOs\TaxonDetailDTO;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class IucnService
 {
@@ -11,7 +13,20 @@ class IucnService
      */
     public function getSystems(): array
     {
-        return ['terrestrial', 'marine', 'freshwater'];
+        return Cache::remember('iucn_systems', 3600, function () {
+            $token = config('services.iucn.key');
+            $baseUrl = config('services.iucn.base_url');
+
+            $response = Http::withHeaders([
+                'Authorization' => $token,
+            ])->get("$baseUrl/systems");
+
+            if ($response->successful()) {
+                return $response->json()['systems'] ?? [];
+            }
+
+            return [];
+        });
     }
 
     /**
@@ -19,7 +34,20 @@ class IucnService
      */
     public function getCountries(): array
     {
-        return ['IT', 'FR', 'ES', 'US', 'AU'];
+        return Cache::remember('iucn_countries', 3600, function () {
+            $token = config('services.iucn.key');
+            $baseUrl = config('services.iucn.base_url');
+
+            $response = Http::withHeaders([
+                'Authorization' => $token,
+            ])->get("$baseUrl/countries");
+
+            if ($response->successful()) {
+                return $response->json()['countries'] ?? [];
+            }
+
+            return [];
+        });
     }
 
     /**

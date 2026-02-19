@@ -13,6 +13,10 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
+    'iucn' => [
+        'key' => env('IUCN_API_KEY'),
+        'base_url' => 'https://api.iucnredlist.org/api/v4',
+    ],
 
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),

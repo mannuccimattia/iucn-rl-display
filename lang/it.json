@@ -1,7 +1,7 @@
 {
-    "terrestrial": "Terrestre",
-    "marine": "Marino",
-    "freshwater": "Acqua dolce",
+    "Terrestrial": "Terrestre",
+    "Marine": "Marino",
+    "Freshwater (=Inland waters)": "Acqua dolce",
     "EX": "Estinto",
     "EW": "Estinto in natura",
     "CR": "In pericolo critico",
@@ -10,10 +10,5 @@
     "NT": "Quasi minacciato",
     "LC": "Minor preoccupazione",
     "DD": "Dati insufficienti",
-    "NE": "Non valutato",
-    "IT": "Italia",
-    "FR": "Francia",
-    "ES": "Spagna",
-    "US": "Stati Uniti",
-    "AU": "Australia"
+    "NE": "Non valutato"
 }

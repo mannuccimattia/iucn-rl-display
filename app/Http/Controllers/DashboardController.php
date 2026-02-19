@@ -10,11 +10,11 @@ class DashboardController extends Controller
 {
     public function index(IucnService $service): View
     {
-        $data = [
-            'systems' => $service->getSystems(),
-            'countries' => $service->getCountries(),
-        ];
+        $systems = $service->getSystems();
+        $countries = $service->getCountries();
 
-        return view('dashboard', $data);
+        // dd($systems, $countries);
+
+        return view('dashboard', compact('systems', 'countries'));
     }
 }
