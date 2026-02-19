@@ -24,12 +24,9 @@ class AssessmentController extends Controller
 
     public function show(string $type, string $id, int $taxon_id, IucnService $service): View
     {
-        $items = $service->getAssessments($type, $id);
+        $taxon = $service->getTaxonDetail($taxon_id);
 
-        $item = collect($items)->firstWhere('taxon_id', $taxon_id);
-
-        if (!$item) abort(404);
-
-        return view('assessments.show', compact('item', 'type', 'id'));
+        // Passiamo l'oggetto alla vista
+        return view('assessments.show', compact('taxon', 'type', 'id'));
     }
 }

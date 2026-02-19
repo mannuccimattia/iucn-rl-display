@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DTOs\TaxonDetailDTO;
+
 class IucnService
 {
     /**
@@ -10,11 +12,6 @@ class IucnService
     public function getSystems(): array
     {
         return ['terrestrial', 'marine', 'freshwater'];
-        // return [
-        //     'terrestrial' => 'Terrestre',
-        //     'marine' => 'Marino',
-        //     'freshwater' => 'Acque Dolci'
-        // ];
     }
 
     /**
@@ -26,6 +23,56 @@ class IucnService
     }
 
     /**
+     * Get mockup taxa data.
+     */
+    private function getMockData(): array
+    {
+        return [
+            3855 => [
+                'scientific_name' => 'Carcharodon carcharias',
+                'common_names' => [
+                    ['name' => 'Squalo Bianco', 'main' => true],
+                    ['name' => 'Great White Shark', 'main' => false],
+                    ['name' => 'Lorem ipsum dolor', 'main' => false],
+                ],
+            ],
+            18588 => [
+                'scientific_name' => 'Balaenoptera musculus',
+                'common_names' => [
+                    ['name' => 'Balenottera Azzurra', 'main' => true],
+                    ['name' => 'Nome comune 2', 'main' => false],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Get mockup taxon detail.
+     */
+    public function getTaxonDetail(int $sis_taxon_id): TaxonDetailDTO
+    {
+        $allData = $this->getMockData();
+
+        $species = $allData[$sis_taxon_id] ?? [
+            'scientific_name' => "Specie Ignota #$sis_taxon_id",
+            'common_names' => [['name' => 'N/A', 'main' => true]]
+        ];
+
+        $data = [
+            'sis_taxon_id' => $sis_taxon_id,
+            'scientific_name' => $species['scientific_name'],
+            'common_names' => $species['common_names'],
+            'assessments' => [
+                ['assessment_id' => $sis_taxon_id . '01', 'category_code' => 'VU', 'published_year' => 2023],
+                ['assessment_id' => $sis_taxon_id . '02', 'category_code' => 'NT', 'published_year' => 2018],
+            ]
+        ];
+
+        return TaxonDetailDTO::fromArray($data);
+    }
+
+
+    /**
      * Get mockup assessments data.
      */
     public function getAssessments(string $type, string $id): array
@@ -34,8 +81,8 @@ class IucnService
             'system' => [
                 'marine' => [
                     ['taxon_id' => 3855, 'scientific_name' => 'Carcharodon carcharias', 'category_code' => 'VU', 'published_year' => 2019, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '1234567', 'iucn_url' => 'https://www.iucnredlist.org/species/3855/1234567'],
-                    ['taxon_id' => 136633, 'scientific_name' => 'Pristis pristis', 'category_code' => 'CR', 'published_year' => 2020, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '141790786', 'iucn_url' => 'https://www.iucnredlist.org/species/136633/141790786'],
-                    ['taxon_id' => 18588, 'scientific_name' => 'Cetorhinus maximus', 'category_code' => 'EN', 'published_year' => 2021, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '39252391', 'iucn_url' => 'https://www.iucnredlist.org/species/18588/39252391'],
+                    ['taxon_id' => null, 'scientific_name' => 'Pristis pristis', 'category_code' => 'CR', 'published_year' => 2020, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '141790786', 'iucn_url' => 'https://www.iucnredlist.org/species/136633/141790786'],
+                    ['taxon_id' => 18588, 'scientific_name' => 'Balaenoptera musculus', 'category_code' => 'EN', 'published_year' => 2021, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '39252391', 'iucn_url' => 'https://www.iucnredlist.org/species/18588/39252391'],
                 ],
                 'terrestrial' => [
                     ['taxon_id' => null, 'scientific_name' => 'Gorilla beringei', 'category_code' => 'CR', 'published_year' => 2020, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '39252391', 'iucn_url' => 'https://www.iucnredlist.org/species/9449/39252391'],
@@ -45,7 +92,7 @@ class IucnService
                 'freshwater' => [
                     ['taxon_id' => 10102, 'scientific_name' => 'Hippopotamus amphibius', 'category_code' => 'VU', 'published_year' => 2017, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '185673647', 'iucn_url' => 'https://www.iucnredlist.org/species/10102/185673647'],
                     ['taxon_id' => 11624, 'scientific_name' => 'Inia geoffrensis', 'category_code' => 'EN', 'published_year' => 2018, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '10831', 'iucn_url' => 'https://www.iucnredlist.org/species/11624/10831'],
-                    ['taxon_id' => 12727, 'scientific_name' => 'Lutra lutra', 'category_code' => 'NT', 'published_year' => 2021, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '12419', 'iucn_url' => 'https://www.iucnredlist.org/species/12727/12419'],
+                    ['taxon_id' => null, 'scientific_name' => 'Lutra lutra', 'category_code' => 'NT', 'published_year' => 2021, 'is_possibly_extinct' => false, 'is_possibly_extinct_in_wild' => false, 'assessment_id' => '12419', 'iucn_url' => 'https://www.iucnredlist.org/species/12727/12419'],
                 ],
             ],
             'country' => [
