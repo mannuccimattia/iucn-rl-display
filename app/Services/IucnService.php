@@ -23,9 +23,8 @@ class IucnService
     public function getSystems(): array
     {
         return Cache::remember('iucn_systems', 3600, function () {
-            $response = Http::withHeaders([
-                'Authorization' => $this->token,
-            ])->get("$this->baseUrl/systems");
+            $response = Http::withToken($this->token)
+                ->get("$this->baseUrl/systems");
 
             if ($response->successful()) {
                 return $response->json()['systems'] ?? [];
@@ -41,9 +40,8 @@ class IucnService
     public function getCountries(): array
     {
         return Cache::remember('iucn_countries', 3600, function () {
-            $response = Http::withHeaders([
-                'Authorization' => $this->token,
-            ])->get("$this->baseUrl/countries");
+            $response = Http::withToken($this->token)
+                ->get("$this->baseUrl/countries");
 
             if ($response->successful()) {
                 return $response->json()['countries'] ?? [];
@@ -63,6 +61,25 @@ class IucnService
         return Cache::remember($cacheName, 300, function () use ($type, $code) {
             $response = Http::withToken($this->token)
                 ->get("$this->baseUrl/$type/$code");
+
+            if ($response->successful()) {
+                return $response->json() ?? [];
+            }
+
+            return [];
+        });
+    }
+
+    /**
+     * Get a collection of assessments for a given SIS id.
+     */
+    public function getAssessmentsBySisId(string $sis_id): array
+    {
+        $cacheName = 'iucn_assessments_for_sis_' . $sis_id;
+
+        return Cache::remember($cacheName, 300, function () use ($sis_id) {
+            $response = Http::withToken($this->token)
+                ->get("$this->baseUrl/taxa/sis/$sis_id");
 
             if ($response->successful()) {
                 return $response->json() ?? [];

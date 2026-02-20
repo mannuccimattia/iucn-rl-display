@@ -6,7 +6,7 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="max-w-7xl sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-main text-main-contrast overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 flex flex-col gap-y-4">
                     <div class="flex flex-col justify-center items-center gap-y-2">

@@ -17,7 +17,7 @@ Route::get('/assessments/{type}/{code}', [AssessmentController::class, 'index'])
     ->where('type', 'systems|countries')
     ->name('assessments.index');
 
-Route::get('/assessments/{type}/{code}/{taxon_id}', [AssessmentController::class, 'show'])
+Route::get('/assessments/{type}/{code}/{sis_id}', [AssessmentController::class, 'show'])
     ->name('assessments.show');
 
 Route::middleware('auth')->group(function () {

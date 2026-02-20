@@ -10,17 +10,42 @@ class AssessmentController extends Controller
 {
     public function index(string $type, string $code, IucnService $service): View
     {
-        $metadata = array_first($service->getLatestAssessments($type, $code));
-        $assessments = $service->getLatestAssessments($type, $code)['assessments'];
+        $response = $service->getLatestAssessments($type, $code);
+
+        $metadata = array_first($response);
+        $assessments = $response['assessments'];
 
         return view('assessments.index', compact('metadata', 'assessments'));
     }
 
-    public function show(string $type, string $id, int $taxon_id, IucnService $service): View
+    public function show(string $type, string $code, int $sis_id, IucnService $service): View
     {
-        $taxon = $service->getTaxonDetail($taxon_id);
+        $metadata = [
+            'type' => $type,
+            'code' => $code,
+        ];
 
-        // Passiamo l'oggetto alla vista
-        return view('assessments.show', compact('taxon', 'type', 'id'));
+        $response = $service->getAssessmentsBySisId($sis_id);
+
+        $taxon = $response['taxon'];
+        $assessments = $response['assessments'];
+
+        $taxon['common_names'] = collect($taxon['common_names'])
+            ->sortByDesc('main')
+            ->values()
+            ->all();
+
+        $legacyMap = [
+            'LR/lc' => 'LC',
+            'LR/nt' => 'NT',
+            'LR/cd' => 'NT',
+        ];
+
+        foreach ($assessments as &$assessment) {
+            $assessment['red_list_category_code'] = $legacyMap[$assessment['red_list_category_code']]
+                ?? $assessment['red_list_category_code'];
+        }
+
+        return view('assessments.show', compact('metadata', 'taxon', 'assessments'));
     }
 }

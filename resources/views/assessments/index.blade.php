@@ -1,11 +1,13 @@
 @php
     $type = request()->route('type');
     $code = request()->route('code');
+
+    // dd($metadata, $assessments);
+
 @endphp
 
 <x-app-layout>
     <x-slot name="header">
-        {{-- @dd(request()->route('code'), $metadata, $assessments) --}}
         <h2 class="font-semibold text-xl text-main-contrast leading-tight">
             Visualizzazione per <span class="font-bold text-main-emphasis">
                 {{ $type === 'systems' ? 'Sistema: ' : 'Nazione: ' }}
@@ -55,13 +57,13 @@
                                     <x-link :href="route('assessments.show', [
                                         'type' => $type,
                                         'code' => $code,
-                                        'taxon_id' => $assessment['sis_taxon_id'],
-                                    ])" class="hover:underline text-sm font-bold relative">
-                                        Vedi Dettagli<i class="ms-1 text-xs fa-solid fa-arrow-right"></i>
+                                        'sis_id' => $assessment['sis_taxon_id'],
+                                    ])" class="hover:underline text-sm font-bold">
+                                        Vedi Dettagli<i class="fa-solid fa-chevron-right text-xs"></i>
                                     </x-link>
                                 @endif
                                 <x-link :href="$assessment['url']" target="_blank"
-                                    class="hover:underline text-sm font-bold relative ms-auto">
+                                    class="hover:underline text-sm font-bold ms-auto">
                                     Scheda Ufficiale<i class="ms-1 text-xs fa-solid fa-up-right-from-square"></i>
                                 </x-link>
                             </div>
