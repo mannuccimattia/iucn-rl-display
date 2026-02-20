@@ -27,7 +27,28 @@
                             <p class="opacity-60 text-sm">SIS Taxon ID: #{{ $taxon['sis_id'] }}</p>
                         </div>
                     </div>
-                    <x-primary-button class="h-fit self-center">Aggiungi ai Preferiti</x-primary-button>
+
+                    @auth
+                        @php
+                            $isFavorite = auth()->user()->favorites()->where('sis_id', $taxon['sis_id'])->exists();
+                        @endphp
+
+                        <form action="{{ route('favorites.toggle') }}" method="POST" class="flex-none">
+                            @csrf
+                            <input type="hidden" name="sis_id" value="{{ $taxon['sis_id'] }}">
+                            <input type="hidden" name="scientific_name" value="{{ $taxon['scientific_name'] }}">
+
+                            <x-primary-button
+                                class="{{ $isFavorite ? 'bg-red-600 hover:bg-red-700 focus:bg-red-700' : '' }}">
+                                @if ($isFavorite)
+                                    <i class="fa-solid fa-heart-crack me-2"></i> Rimuovi dai Preferiti
+                                @else
+                                    <i class="fa-solid fa-heart me-2"></i> Aggiungi ai Preferiti
+                                @endif
+                            </x-primary-button>
+                        </form>
+                    @endauth
+                    {{-- <x-primary-button class="h-fit self-center">Aggiungi ai Preferiti</x-primary-button> --}}
                 </div>
 
 

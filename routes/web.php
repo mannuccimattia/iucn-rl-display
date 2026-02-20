@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AssessmentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,7 +11,12 @@ Route::get('/', [DashboardController::class, 'index'])
 
 Route::get('favorites', function () {
     return view('favorites');
-})->name('favorites');
+})->middleware('auth')
+    ->name('favorites');
+
+Route::post('/favorites/toggle', [FavoriteController::class, 'toggle'])
+    ->middleware('auth')
+    ->name('favorites.toggle');
 
 
 Route::get('/assessments/{type}/{code}', [AssessmentController::class, 'index'])
