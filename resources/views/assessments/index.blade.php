@@ -24,18 +24,18 @@
                     <h3 class="text-lg font-bold">Risultati della ricerca</h3>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
 
                     @foreach ($assessments as $assessment)
                         <x-card class="p-6 shadow duration-150 transition-all">
-                            <h3 class="text-xl font-bold italic">{{ $assessment['taxon_scientific_name'] }}</h3>
+                            <h3 class="text-lg font-bold italic">{{ $assessment['taxon_scientific_name'] }}</h3>
 
-                            <div class="flex justify-between items-center mb-4">
+                            <div class="flex flex-col justify-between md:flex-row md:items-center gap-y-2 mb-4">
                                 <span class="text-sm text-gray-300">
                                     ID Valutazione: {{ $assessment['assessment_id'] }}
                                 </span>
                                 <span
-                                    class="px-3 py-1 rounded text-xs font-bold bg-main">{{ __($assessment['red_list_category_code']) }}
+                                    class=" w-fit px-3 py-1 rounded text-xs font-bold bg-main">{{ __($assessment['red_list_category_code']) }}
                                 </span>
                             </div>
 
