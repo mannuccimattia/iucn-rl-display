@@ -28,6 +28,15 @@
                         </div>
                     </div>
 
+                    @guest
+                        <form action="{{ route('favorites.toggle') }}" method="POST">
+                            @csrf
+                            <x-primary-button>
+                                <i class="fa-solid fa-heart me-2"></i> Aggiungi ai Preferiti
+                            </x-primary-button>
+                        </form>
+                    @endguest
+
                     @auth
                         @php
                             $isFavorite = auth()->user()->favorites()->where('sis_id', $taxon['sis_id'])->exists();
@@ -38,8 +47,7 @@
                             <input type="hidden" name="sis_id" value="{{ $taxon['sis_id'] }}">
                             <input type="hidden" name="scientific_name" value="{{ $taxon['scientific_name'] }}">
 
-                            <x-primary-button
-                                class="{{ $isFavorite ? 'bg-red-600 hover:bg-red-700 focus:bg-red-700' : '' }}">
+                            <x-primary-button>
                                 @if ($isFavorite)
                                     <i class="fa-solid fa-heart-crack me-2"></i> Rimuovi dai Preferiti
                                 @else

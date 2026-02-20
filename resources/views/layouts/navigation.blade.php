@@ -15,9 +15,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         Home
                     </x-nav-link>
-                    <x-nav-link :href="route('favorites')" :active="request()->routeIs('favorites')">
-                        Preferiti
-                    </x-nav-link>
+                    @auth
+                        <x-nav-link :href="route('favorites')" :active="request()->routeIs('favorites')">
+                            Preferiti
+                        </x-nav-link>
+                    @endauth
                 </div>
             </div>
 
@@ -60,13 +62,13 @@
                     </x-dropdown>
                 @else
                     <a href="{{ route('login') }}"
-                        class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] text-[#1b1b18] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal">
+                        class="inline-block px-5 py-1.5 text-main-contrast/70 hover:text-main-contrast border border-transparent hover:border-main-emphasis/20  rounded-sm text-sm leading-normal">
                         Log In
                     </a>
 
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}"
-                            class="inline-block px-5 py-1.5 dark:text-[#EDEDEC] border-[#19140035] hover:border-[#1915014a] border text-[#1b1b18] dark:border-[#3E3E3A] dark:hover:border-[#62605b] rounded-sm text-sm leading-normal">
+                            class="inline-block px-5 py-1.5 text-main-contrast/70 hover:text-main-contrast border border-transparent hover:border-main-emphasis/20 rounded-sm text-sm leading-normal">
                             Registrati
                         </a>
                     @endif
@@ -95,9 +97,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 Home
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('favorites')" :active="request()->routeIs('favorites')">
-                Preferiti
-            </x-responsive-nav-link>
+            @auth
+                <x-responsive-nav-link :href="route('favorites')" :active="request()->routeIs('favorites')">
+                    Preferiti
+                </x-responsive-nav-link>
+            @endauth
         </div>
 
 
