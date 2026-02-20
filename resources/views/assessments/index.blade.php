@@ -1,7 +1,15 @@
+@php
+    $type = request()->route('type');
+    $code = request()->route('code');
+@endphp
+
 <x-app-layout>
     <x-slot name="header">
+        {{-- @dd(request()->route('code'), $metadata, $assessments) --}}
         <h2 class="font-semibold text-xl text-main-contrast leading-tight">
-            Visualizzazione per <span class="font-bold text-main-emphasis">{{ $title }}
+            Visualizzazione per <span class="font-bold text-main-emphasis">
+                {{ $type === 'systems' ? 'Sistema: ' : 'Nazione: ' }}
+                {{ __($metadata['description']['en']) }}
             </span>
         </h2>
     </x-slot>
@@ -18,41 +26,41 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
 
-                    @foreach ($items as $item)
-                        <x-card class="shadow duration-150 transition-all">
-                            <h3 class="text-xl font-bold italic">{{ $item['scientific_name'] }}</h3>
+                    @foreach ($assessments as $assessment)
+                        <x-card class="p-6 shadow duration-150 transition-all">
+                            <h3 class="text-xl font-bold italic">{{ $assessment['taxon_scientific_name'] }}</h3>
 
                             <div class="flex justify-between items-center mb-4">
                                 <span class="text-sm text-gray-300">
-                                    ID Valutazione: {{ $item['assessment_id'] }}
+                                    ID Valutazione: {{ $assessment['assessment_id'] }}
                                 </span>
                                 <span
-                                    class="px-3 py-1 rounded text-xs font-bold bg-main">{{ __($item['category_code']) }}
+                                    class="px-3 py-1 rounded text-xs font-bold bg-main">{{ __($assessment['red_list_category_code']) }}
                                 </span>
                             </div>
 
                             <div class="space-y-1 text-sm text-gray-400">
                                 <p><strong>Anno:</strong>
-                                    {{ $item['published_year'] }}
+                                    {{ $assessment['year_published'] }}
                                 </p>
                                 <p><strong>Possibile Estinto:</strong>
-                                    {{ $item['is_possibly_extinct'] ? 'Sì' : 'No' }}
+                                    {{ $assessment['possibly_extinct'] ? 'Sì' : 'No' }}
                                 </p>
                                 <p><strong>Possibile Estinto in Natura:</strong>
-                                    {{ $item['is_possibly_extinct_in_wild'] ? 'Sì' : 'No' }}</p>
+                                    {{ $assessment['possibly_extinct_in_the_wild'] ? 'Sì' : 'No' }}</p>
                             </div>
 
                             <div class="mt-4 pt-4 border-t border-main-emphasis flex justify-between">
-                                @if ($item['taxon_id'])
+                                @if ($assessment['sis_taxon_id'])
                                     <x-link :href="route('assessments.show', [
                                         'type' => $type,
-                                        'id' => $id,
-                                        'taxon_id' => $item['taxon_id'],
+                                        'code' => $code,
+                                        'taxon_id' => $assessment['sis_taxon_id'],
                                     ])" class="hover:underline text-sm font-bold relative">
                                         Vedi Dettagli<i class="ms-1 text-xs fa-solid fa-arrow-right"></i>
                                     </x-link>
                                 @endif
-                                <x-link :href="$item['iucn_url']" target="_blank"
+                                <x-link :href="$assessment['url']" target="_blank"
                                     class="hover:underline text-sm font-bold relative ms-auto">
                                     Scheda Ufficiale<i class="ms-1 text-xs fa-solid fa-up-right-from-square"></i>
                                 </x-link>

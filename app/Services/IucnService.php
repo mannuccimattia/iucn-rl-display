@@ -8,18 +8,24 @@ use Illuminate\Support\Facades\Http;
 
 class IucnService
 {
+    protected string $token;
+    protected string $baseUrl;
+
+    public function __construct()
+    {
+        $this->token = config('services.iucn.key');
+        $this->baseUrl = config('services.iucn.base_url');
+    }
+
     /**
      * Get the list of systems.
      */
     public function getSystems(): array
     {
         return Cache::remember('iucn_systems', 3600, function () {
-            $token = config('services.iucn.key');
-            $baseUrl = config('services.iucn.base_url');
-
             $response = Http::withHeaders([
-                'Authorization' => $token,
-            ])->get("$baseUrl/systems");
+                'Authorization' => $this->token,
+            ])->get("$this->baseUrl/systems");
 
             if ($response->successful()) {
                 return $response->json()['systems'] ?? [];
@@ -35,15 +41,31 @@ class IucnService
     public function getCountries(): array
     {
         return Cache::remember('iucn_countries', 3600, function () {
-            $token = config('services.iucn.key');
-            $baseUrl = config('services.iucn.base_url');
-
             $response = Http::withHeaders([
-                'Authorization' => $token,
-            ])->get("$baseUrl/countries");
+                'Authorization' => $this->token,
+            ])->get("$this->baseUrl/countries");
 
             if ($response->successful()) {
                 return $response->json()['countries'] ?? [];
+            }
+
+            return [];
+        });
+    }
+
+    /**
+     * Get the latest assessments for a given system.
+     */
+    public function getLatestAssessments(string $type, string $code): array
+    {
+        $cacheName = 'iucn_latest_' . $type . '_' . $code;
+
+        return Cache::remember($cacheName, 300, function () use ($type, $code) {
+            $response = Http::withToken($this->token)
+                ->get("$this->baseUrl/$type/$code");
+
+            if ($response->successful()) {
+                return $response->json() ?? [];
             }
 
             return [];

@@ -1,3 +1,8 @@
+@php
+    $type = request()->route('type');
+    $code = request()->route('code');
+@endphp
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-main-contrast leading-tight">
@@ -12,7 +17,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-main text-main-contrast overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div class="mb-8 pb-4 flex items-top border-b border-main-emphasis">
-                    <x-link :href="route('assessments.index', ['type' => $type, 'id' => $id])">
+                    <x-link :href="route('assessments.index', ['type' => $type, 'code' => $code])">
                         <i class="me-4 mt-2.5 fa-solid fa-chevron-left"></i>
                     </x-link>
                     <div>
