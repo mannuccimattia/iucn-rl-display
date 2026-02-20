@@ -5,44 +5,47 @@
 
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-main-contrast leading-tight">
-            Visualizzazione dettaglio: <p class="inline font-bold italic text-main-emphasis">
-                {{ $taxon['scientific_name'] }}
-            </p>
-            </p>
-        </h2>
+        <div class="flex justify-between items-center">
+            <h2 class="font-semibold text-xl text-main-contrast leading-tight">
+                Visualizzazione dettaglio: <p class="inline font-bold italic text-main-emphasis">
+                    {{ $taxon['scientific_name'] }}
+                </p>
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-main text-main-contrast overflow-hidden shadow-sm sm:rounded-lg p-6">
-                <div class="mb-8 pb-4 flex items-top border-b border-main-emphasis">
-                    <x-link :href="route('assessments.index', ['type' => $type, 'code' => $code])">
-                        <i class="me-4 mt-2.5 fa-solid fa-chevron-left"></i>
-                    </x-link>
-                    <div>
-                        <h3 class="text-2xl font-black italic">{{ $taxon['scientific_name'] }}</h3>
-                        <p class="opacity-60 text-sm">SIS Taxon ID: #{{ $taxon['sis_id'] }}</p>
+                <div class="mb-8 pb-4 flex justify-between items-top border-b border-main-emphasis">
+                    <div class="flex items-top">
+                        <x-link :href="route('assessments.index', ['type' => $type, 'code' => $code])">
+                            <i class="me-4 mt-2.5 fa-solid fa-chevron-left"></i>
+                        </x-link>
+                        <div>
+                            <h3 class="text-2xl font-black italic">{{ $taxon['scientific_name'] }}</h3>
+                            <p class="opacity-60 text-sm">SIS Taxon ID: #{{ $taxon['sis_id'] }}</p>
+                        </div>
                     </div>
+                    <x-primary-button class="h-fit self-center">Aggiungi ai Preferiti</x-primary-button>
                 </div>
+
 
                 <h3 class="text-xs font-bold uppercase mb-4 opacity-60">
                     Nomi Comuni</h3>
                 <x-card class="p-6 flex flex-wrap gap-2">
-                    @if (count($taxon['common_names']) === 0)
+                    @forelse ($taxon['common_names'] as $name)
+                        <span @class([
+                            'px-4 py-1 rounded-full text-sm border transition',
+                            'bg-main-emphasis text-main border-main-emphasis font-bold shadow-lg' =>
+                                $name['main'],
+                            'border-main-emphasis/20 text-main-emphasis/90' => !$name['main'],
+                        ])>
+                            {{ $name['name'] }}
+                        </span>
+                    @empty
                         <span>Nessun nome comune associato a {{ $taxon['scientific_name'] }}</span>
-                    @else
-                        @foreach ($taxon['common_names'] as $name)
-                            <span @class([
-                                'px-4 py-1 rounded-full text-sm border transition',
-                                'bg-main-emphasis text-main border-main-emphasis font-bold shadow-lg' =>
-                                    $name['main'],
-                                'border-main-emphasis/20 text-main-emphasis/90' => !$name['main'],
-                            ])>
-                                {{ $name['name'] }}
-                            </span>
-                        @endforeach
-                    @endif
+                    @endforelse
                 </x-card>
 
                 <div class="mt-12">

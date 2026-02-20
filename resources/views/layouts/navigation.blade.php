@@ -15,7 +15,7 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         Home
                     </x-nav-link>
-                    <x-nav-link :href="route('favourites')" :active="request()->routeIs('favourites')">
+                    <x-nav-link :href="route('favorites')" :active="request()->routeIs('favorites')">
                         Preferiti
                     </x-nav-link>
                 </div>
@@ -95,7 +95,7 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 Home
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('favourites')" :active="request()->routeIs('favourites')">
+            <x-responsive-nav-link :href="route('favorites')" :active="request()->routeIs('favorites')">
                 Preferiti
             </x-responsive-nav-link>
         </div>

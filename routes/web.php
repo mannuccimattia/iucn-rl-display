@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'index'])
     ->name('dashboard');
 
-Route::get('favourites', function () {
-    return view('favourites');
-})->name('favourites');
+Route::get('favorites', function () {
+    return view('favorites');
+})->name('favorites');
 
 
 Route::get('/assessments/{type}/{code}', [AssessmentController::class, 'index'])
