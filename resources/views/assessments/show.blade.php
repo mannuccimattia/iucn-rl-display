@@ -58,7 +58,6 @@
                             </x-primary-button>
                         </form>
                     @endauth
-                    {{-- <x-primary-button class="h-fit self-center">Aggiungi ai Preferiti</x-primary-button> --}}
                 </div>
 
 
@@ -75,7 +74,7 @@
                             {{ $name['name'] }}
                         </span>
                     @empty
-                        <span>Nessun nome comune associato a {{ $taxon['scientific_name'] }}</span>
+                        <span class="opacity-50">Nessun nome comune associato a {{ $taxon['scientific_name'] }}</span>
                     @endforelse
                 </x-card>
 
@@ -125,7 +124,9 @@
                                 <div
                                     class="flex flex-col gap-5 min-[400px]:flex-row min-[400px]:justify-between min-[400px]:items-center border-t lg:border-t-0 pt-4 lg:pt-0 border-main-emphasis">
 
-                                    <x-link href="#" class="hover:underline">
+                                    <x-link :href="route('assessments.show-assessment', [
+                                        'assessment_id' => $assessment['assessment_id'],
+                                    ])" class="hover:underline">
                                         <div>Valutazione<i class="ms-1 fa-solid fa-chevron-right text-xs"></i></div>
                                     </x-link>
 

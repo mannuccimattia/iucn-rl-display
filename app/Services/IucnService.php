@@ -88,4 +88,23 @@ class IucnService
             return [];
         });
     }
+
+    /**
+     * Get assessment data for a supplied assessment_id.
+     */
+    public function getAssessment(string $assessment_id): array
+    {
+        $cacheName = 'iucn_assessment_' . $assessment_id;
+
+        return Cache::remember($cacheName, 300, function () use ($assessment_id) {
+            $response = Http::withToken($this->token)
+                ->get("$this->baseUrl/assessment/$assessment_id");
+
+            if ($response->successful()) {
+                return $response->json() ?? [];
+            }
+
+            return [];
+        });
+    }
 }

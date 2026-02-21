@@ -8,7 +8,7 @@ use Illuminate\View\View;
 
 class AssessmentController extends Controller
 {
-    public function index(string $type, string $code, IucnService $service): View
+    public function index(IucnService $service, string $type, string $code): View
     {
         $response = $service->getLatestAssessments($type, $code);
 
@@ -18,7 +18,7 @@ class AssessmentController extends Controller
         return view('assessments.index', compact('metadata', 'assessments'));
     }
 
-    public function show(string $type, string $code, int $sis_id, IucnService $service): View
+    public function show(IucnService $service, string $type, string $code, int $sis_id): View
     {
         $metadata = [
             'type' => $type,
@@ -47,5 +47,12 @@ class AssessmentController extends Controller
         }
 
         return view('assessments.show', compact('metadata', 'taxon', 'assessments'));
+    }
+
+    public function showAssessment(IucnService $service, int $assessment_id): View
+    {
+        $assessment = $service->getAssessment($assessment_id);
+
+        return view('assessments.show-assessment', compact('assessment'));
     }
 }
