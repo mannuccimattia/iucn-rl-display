@@ -8,25 +8,51 @@ use Illuminate\View\View;
 
 class AssessmentController extends Controller
 {
-    public function index(string $type, string $id, IucnService $service): View
+    public function index(IucnService $service, string $type, string $code): View
     {
-        $title = __($id);
+        $response = $service->getLatestAssessments($type, $code);
 
-        $viewData = [
-            'type' => $type,
-            'id' => $id,
-            'title' => ($type === 'system') ? "Sistema: $title" : "Nazione: $title",
-            'items' => $service->getAssessments($type, $id),
-        ];
+        $metadata = array_first($response);
+        $assessments = $response['assessments'];
 
-        return view('assessments.index', $viewData);
+        return view('assessments.index', compact('metadata', 'assessments'));
     }
 
-    public function show(string $type, string $id, int $taxon_id, IucnService $service): View
+    public function show(IucnService $service, string $type, string $code, int $sis_id): View
     {
-        $taxon = $service->getTaxonDetail($taxon_id);
+        $metadata = [
+            'type' => $type,
+            'code' => $code,
+        ];
 
-        // Passiamo l'oggetto alla vista
-        return view('assessments.show', compact('taxon', 'type', 'id'));
+        $response = $service->getAssessmentsBySisId($sis_id);
+
+        $taxon = $response['taxon'];
+        $assessments = $response['assessments'];
+
+        $taxon['common_names'] = collect($taxon['common_names'])
+            ->sortByDesc('main')
+            ->values()
+            ->all();
+
+        $legacyMap = [
+            'LR/lc' => 'LC',
+            'LR/nt' => 'NT',
+            'LR/cd' => 'NT',
+        ];
+
+        foreach ($assessments as &$assessment) {
+            $assessment['red_list_category_code'] = $legacyMap[$assessment['red_list_category_code']]
+                ?? $assessment['red_list_category_code'];
+        }
+
+        return view('assessments.show', compact('metadata', 'taxon', 'assessments'));
+    }
+
+    public function showAssessment(IucnService $service, int $assessment_id): View
+    {
+        $assessment = $service->getAssessment($assessment_id);
+
+        return view('assessments.show-assessment', compact('assessment'));
     }
 }
