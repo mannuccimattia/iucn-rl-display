@@ -109,7 +109,7 @@ class IucnService
     }
 
     /**
-     * Get the current version number of the IUCN Red List of Threatened Species API.
+     * Get API version, Red List version and species count data for the footer.
      */
     public function getFooterData(): array
     {
@@ -118,7 +118,7 @@ class IucnService
                 ->get("$this->baseUrl/information/api_version")
                 ->json();
 
-            usleep(300000);
+            usleep(300000); // Wait time as requested by responsible usage.
 
             $redListVersion = Http::withToken($this->token)
                 ->get("$this->baseUrl/information/red_list_version")
