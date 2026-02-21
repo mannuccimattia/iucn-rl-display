@@ -126,6 +126,9 @@
 
                                     <x-link :href="route('assessments.show-assessment', [
                                         'assessment_id' => $assessment['assessment_id'],
+                                        'type' => $type,
+                                        'code' => $code,
+                                        'sis_id' => $taxon['sis_id'],
                                     ])" class="hover:underline">
                                         <div>Valutazione<i class="ms-1 fa-solid fa-chevron-right text-xs"></i></div>
                                     </x-link>
