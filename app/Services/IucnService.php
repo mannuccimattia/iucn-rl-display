@@ -107,4 +107,30 @@ class IucnService
             return [];
         });
     }
+
+    /**
+     * Get the current version number of the IUCN Red List of Threatened Species API.
+     */
+    public function getFooterData(): array
+    {
+        return Cache::remember('footer_data', 86400, function () {
+            $apiVersion = Http::withToken($this->token)
+                ->get("$this->baseUrl/information/api_version")
+                ->json();
+
+            usleep(300000);
+
+            $redListVersion = Http::withToken($this->token)
+                ->get("$this->baseUrl/information/red_list_version")
+                ->json();
+
+            usleep(300000);
+
+            $speciesCount = Http::withToken($this->token)
+                ->get("$this->baseUrl/statistics/count")
+                ->json();
+
+            return array_merge($apiVersion, $redListVersion, $speciesCount);
+        });
+    }
 }
