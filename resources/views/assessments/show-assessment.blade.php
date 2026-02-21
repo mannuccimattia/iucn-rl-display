@@ -30,7 +30,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-main text-main-contrast overflow-hidden shadow-sm sm:rounded-lg p-6">
                 <div
-                    class="mb-8 pb-4 flex flex-col gap-y-5 sm:flex-row sm:justify-between items-center border-b border-main-emphasis">
+                    class="mb-8 pb-4 flex flex-col gap-y-5 sm:flex-row sm:justify-between sm:items-center border-b border-main-emphasis">
                     <div class="flex items-top">
                         <x-link :href="$backHref">
                             <i class="me-4 mt-2.5 fa-solid fa-chevron-left"></i>
@@ -52,10 +52,11 @@
                         Azioni di conservazione svolte sul posto</h3>
                     <div class="flex flex-col gap-y-3">
                         @forelse ($assessment['supplementary_info']['conservation_actions_in_place'] as $actions)
-                            <x-card class="p-6 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
-                                <h4 class="text-sm uppercase font-bold">{{ $actions['name'] }}</h4>
-                                @foreach ($actions['actions'] as $action)
-                                    <div class="flex flex-col opacity-50 text-sm">
+                            <x-card class="p-6 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-2">
+                                <h4 class="w-[200px] lg:w-[300px] text-sm uppercase font-bold">
+                                    {{ $actions['name'] }} </h4>
+                                <div class="flex flex-col items-start lg:items-end opacity-50 text-sm">
+                                    @foreach ($actions['actions'] as $action)
                                         <span>
                                             <i
                                                 class="me-1 fa-solid {{ strncasecmp(trim((string) ($action['value'] ?? '')), 'Yes', 3) === 0
@@ -63,8 +64,8 @@
                                                     : 'fa-xmark text-red-500' }}"></i>
                                             {{ $action['name'] }}
                                         </span>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </x-card>
                         @empty
                             <span class="opacity-50">Nessuna azione di conservazione sul posto verificata.</span>

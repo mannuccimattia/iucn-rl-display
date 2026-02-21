@@ -1,4 +1,4 @@
-<footer class="bg-main-light border-t border-main-dark">
+<footer class="bg-main-light shadow border-t border-main-dark">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center p-6">
             <div class="shrink-0 flex items-center">
