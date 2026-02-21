@@ -9,9 +9,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'index'])
     ->name('dashboard');
 
-Route::get('favorites', function () {
-    return view('favorites');
-})->middleware('auth')
+Route::get('/favorites', [FavoriteController::class, 'index'])
+    ->middleware('auth')
     ->name('favorites');
 
 Route::post('/favorites/toggle', [FavoriteController::class, 'toggle'])

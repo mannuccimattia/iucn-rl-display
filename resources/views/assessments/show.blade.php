@@ -46,6 +46,8 @@
                             @csrf
                             <input type="hidden" name="sis_id" value="{{ $taxon['sis_id'] }}">
                             <input type="hidden" name="scientific_name" value="{{ $taxon['scientific_name'] }}">
+                            <input type="hidden" name="type" value="{{ $type }}">
+                            <input type="hidden" name="code" value="{{ $code }}">
 
                             <x-primary-button>
                                 @if ($isFavorite)
