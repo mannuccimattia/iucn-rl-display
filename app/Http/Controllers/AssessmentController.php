@@ -56,6 +56,9 @@ class AssessmentController extends Controller
             'LR/lc' => 'LC',
             'LR/nt' => 'NT',
             'LR/cd' => 'NT',
+            'V' => 'VU',
+            'I' => 'NE',
+            'K' => 'DD',
         ];
 
         // Iterate mapping.
