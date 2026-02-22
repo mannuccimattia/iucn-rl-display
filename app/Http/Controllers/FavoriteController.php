@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Favorite;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,11 +15,14 @@ class FavoriteController extends Controller
     public function index(): View
     {
         // Store logged user.
+        /** @var User $user */
         $user = Auth::user();
 
-        // Get favorites of logged user.
-        $favorites = Favorite::where('user_id', $user->id)
-            ->get();
+        // Get paginated favorites of logged user via relation.
+        $favorites = $user->favorites()
+            ->latest()
+            ->paginate(18)
+            ->withQueryString();
 
         return view('favorites', compact('favorites'));
     }

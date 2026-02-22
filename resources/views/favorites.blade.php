@@ -1,6 +1,6 @@
 <x-app-layout>
     @php
-        $viewMode = request()->query('view', 'list');
+        $viewMode = request('view', 'list');
     @endphp
 
     <x-slot name="header">
@@ -15,7 +15,7 @@
                 <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div class="flex items-center">
                         <x-link :href="route('dashboard')">
-                            <i class="me-4 fa-solid fa-chevron-left"></i>
+                            <i class="me-4 fa-solid fa-home"></i>
                         </x-link>
                         <h3 class="text-lg font-bold">I tuoi preferiti</h3>
                     </div>
@@ -55,7 +55,7 @@
                     <div class="grid gap-4">
                         @foreach ($favorites as $favorite)
                             <x-list>
-                                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+                                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                                     <div class="flex flex-col">
                                         <span class="text-[10px] uppercase opacity-50 font-bold">Nome scientifico</span>
                                         <span class="text-xl font-black">{{ $favorite->scientific_name }}</span>
@@ -90,6 +90,8 @@
                         @endforeach
                     </div>
                 @endif
+
+                {{ $favorites->links() }}
             </div>
         </div>
     </div>
