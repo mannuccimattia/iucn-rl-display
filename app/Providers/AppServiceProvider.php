@@ -21,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(IucnService $service): void
     {
+        // Get footer data from service.
         View::composer('layouts.footer', function ($view) use ($service) {
             $view->with('footerData', $service->getFooterData());
         });

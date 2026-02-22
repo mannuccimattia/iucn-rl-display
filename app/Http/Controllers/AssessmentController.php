@@ -9,16 +9,23 @@ use Illuminate\View\View;
 class AssessmentController extends Controller
 {
     /** Display all assessments given {type} and {code}.*/
-    public function index(IucnService $service, string $type, string $code): View
+    public function index(Request $request, IucnService $service, string $type, string $code): View
     {
-        $response = $service->getLatestAssessments($type, $code);
+        $page = max(1, (int) $request->query('page', 1));
+        $perPage = 18;
+
+        $result = $service->getLatestAssessments($type, $code, $page, $perPage);
+
+        // Split pagination metadata from response.
+        $response = $result['data'];
+        $pagination = $result['pagination'];
 
         // Store $type and $code for backward navigation.
         $metadata = array_first($response);
 
-        $assessments = $response['assessments'];
+        $assessments = $response['assessments'] ?? [];
 
-        return view('assessments.index', compact('metadata', 'assessments'));
+        return view('assessments.index', compact('metadata', 'assessments', 'pagination'));
     }
 
     /** Display details of taxon given  it's id {sis_id}. */
