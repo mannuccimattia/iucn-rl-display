@@ -1,18 +1,9 @@
 @php
     $trend = data_get($assessment, 'population_trend.description.en', 'N/D');
-
     $type = request('type');
     $code = request('code');
     $sisId = request('sis_id') ?? ($assessment['sis_taxon_id'] ?? null);
-
-    $backHref =
-        $type && $code && $sisId
-            ? route('assessments.show', [
-                'type' => $type,
-                'code' => $code,
-                'sis_id' => $sisId,
-            ])
-            : url()->previous();
+    $viewMode = request('view', 'list');
 @endphp
 
 <x-app-layout>
@@ -32,7 +23,12 @@
                 <div
                     class="mb-8 pb-4 flex flex-col gap-y-5 sm:flex-row sm:justify-between sm:items-center border-b border-main-emphasis">
                     <div class="flex items-top">
-                        <x-link :href="$backHref">
+                        <x-link :href="route('assessments.show', [
+                            'type' => $type,
+                            'code' => $code,
+                            'sis_id' => $sisId,
+                            'view' => $viewMode,
+                        ])">
                             <i class="me-4 mt-2.5 fa-solid fa-chevron-left"></i>
                         </x-link>
                         <div>
@@ -52,18 +48,20 @@
                         Azioni di conservazione svolte sul posto</h3>
                     <div class="flex flex-col gap-y-3">
                         @forelse ($assessment['supplementary_info']['conservation_actions_in_place'] as $actions)
-                            <x-card class="p-6 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-2">
-                                <h4 class="w-[200px] lg:w-[300px] text-sm uppercase font-bold">
+                            <x-card class="p-6 flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
+                                <h4 class="sm:w-[200px] lg:w-[300px] text-sm uppercase font-bold">
                                     {{ $actions['name'] }} </h4>
-                                <div class="flex flex-col items-start lg:items-end opacity-50 text-sm">
+                                <div class="flex flex-col items-start lg:items-end opacity-50 text-sm gap-2">
                                     @foreach ($actions['actions'] as $action)
-                                        <span>
-                                            <i
-                                                class="me-1 fa-solid {{ strncasecmp(trim((string) ($action['value'] ?? '')), 'Yes', 3) === 0
-                                                    ? 'fa-check text-green-500'
-                                                    : 'fa-xmark text-red-500' }}"></i>
+                                        @php
+                                            $isActionActive =
+                                                strncasecmp(trim((string) ($action['value'] ?? '')), 'Yes', 3) === 0;
+                                        @endphp
+                                        <div class="flex max-[400px]:flex-row-reverse flex-row items-center leading-3">
                                             {{ $action['name'] }}
-                                        </span>
+                                            <i
+                                                class="max-[400px]:me-1 me-0 ms-1 fa-solid {{ $isActionActive ? 'fa-check text-green-500' : 'fa-xmark text-red-500' }}"></i>
+                                        </div>
                                     @endforeach
                                 </div>
                             </x-card>
@@ -80,7 +78,7 @@
                         @foreach ($assessment['documentation'] as $key => $value)
                             <x-card class="p-6 flex flex-col md:flex-row md:justify-between md:items-top gap-2">
                                 <h4 class="w-[200px] lg:w-[300px] text-sm uppercase font-bold">{{ __($key) }}</h4>
-                                <span class="w-full text-sm opacity-70">{!! $value ?? 'N/D' !!}</span>
+                                <span class="w-full text-sm opacity-70">{!! $value ?? '--' !!}</span>
                             </x-card>
                         @endforeach
                     </div>
@@ -94,6 +92,7 @@
                                 <x-link :href="route('assessments.index', [
                                     'type' => 'systems',
                                     'code' => $system['code'],
+                                    'view' => $viewMode,
                                 ])">
                                     <x-card
                                         class="p-6 uppercase text-sm">{{ __($system['description']['en']) }}</x-card>

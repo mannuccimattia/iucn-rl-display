@@ -1,7 +1,7 @@
 @php
-    $type = request()->route('type');
-    $code = request()->route('code');
-    $viewMode = request()->query('view', 'list');
+    $type = request('type');
+    $code = request('code');
+    $viewMode = request('view', 'list');
 @endphp
 
 <x-app-layout>
@@ -21,7 +21,11 @@
                 <div
                     class="mb-8 pb-4 flex flex-col sm:flex-row sm:justify-between sm:items-top border-b border-main-emphasis">
                     <div class="flex items-top mb-6 sm:mb-0">
-                        <x-link :href="route('assessments.index', ['type' => $type, 'code' => $code])">
+                        <x-link :href="route('assessments.index', [
+                            'type' => $type,
+                            'code' => $code,
+                            'view' => $viewMode,
+                        ])">
                             <i class="me-4 mt-2.5 fa-solid fa-chevron-left"></i>
                         </x-link>
                         <div>
@@ -115,6 +119,7 @@
                                             'type' => $type,
                                             'code' => $code,
                                             'sis_id' => $taxon['sis_id'],
+                                            'view' => $viewMode,
                                         ])" class="hover:underline text-sm font-bold">
                                             Valutazione<i class="ms-1 fa-solid fa-chevron-right text-xs"></i>
                                         </x-link>
@@ -179,6 +184,7 @@
                                             'type' => $type,
                                             'code' => $code,
                                             'sis_id' => $taxon['sis_id'],
+                                            'view' => $viewMode,
                                         ])" class="hover:underline">
                                             <div>Valutazione<i class="ms-1 fa-solid fa-chevron-right text-xs"></i></div>
                                         </x-link>

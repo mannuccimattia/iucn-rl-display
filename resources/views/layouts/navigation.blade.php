@@ -1,3 +1,7 @@
+@php
+    $viewMode = request('view', 'list');
+@endphp
+
 <nav x-data="{ open: false }" class="bg-main-light border-b border-main-dark">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -16,7 +20,9 @@
                         Home
                     </x-nav-link>
                     @auth
-                        <x-nav-link :href="route('favorites')" :active="request()->routeIs('favorites')">
+                        <x-nav-link :href="route('favorites', [
+                            'view' => $viewMode,
+                        ])" :active="request()->routeIs('favorites')">
                             Preferiti
                         </x-nav-link>
                     @endauth

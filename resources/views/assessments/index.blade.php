@@ -1,7 +1,8 @@
 @php
-    $type = request()->route('type');
-    $code = request()->route('code');
-    $viewMode = request()->query('view', 'list');
+    $type = request('type');
+    $code = request('code');
+    $viewMode = request('view', 'list');
+    $baseQuery = request()->except('page');
 @endphp
 
 <x-app-layout>
@@ -56,6 +57,7 @@
                                             'type' => $type,
                                             'code' => $code,
                                             'sis_id' => $assessment['sis_taxon_id'],
+                                            'view' => $viewMode,
                                         ])" class="hover:underline text-sm font-bold">
                                             Vedi Dettagli<i class="fa-solid fa-chevron-right text-xs"></i>
                                         </x-link>
@@ -123,6 +125,87 @@
                         @endforeach
                     </div>
                 @endif
+
+                <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <p class="text-sm opacity-60">
+                        Pagina {{ $pagination['current_page'] }} di {{ $pagination['total_pages'] }}
+                        @if ($pagination['total_count'] > 0)
+                            - Totale risultati: {{ $pagination['total_count'] }}
+                        @endif
+                    </p>
+
+                    <div class="flex max-[400px]:justify-between justify-center sm:justify-normal items-center gap-5">
+                        @if ($pagination['has_prev'])
+                            <x-link :href="route(
+                                'assessments.index',
+                                array_merge(
+                                    [
+                                        'type' => $type,
+                                        'code' => $code,
+                                    ],
+                                    $baseQuery,
+                                    [
+                                        'page' => 1,
+                                    ],
+                                ),
+                            )">
+                                <i class="me-1 fa-solid fa-angles-left text-xs"></i>
+                                <span class="max-[400px]:hidden">Inizio</span>
+                            </x-link>
+                            <x-link :href="route(
+                                'assessments.index',
+                                array_merge(
+                                    [
+                                        'type' => $type,
+                                        'code' => $code,
+                                    ],
+                                    $baseQuery,
+                                    [
+                                        'page' => $pagination['current_page'] - 1,
+                                    ],
+                                ),
+                            )">
+                                <i class="me-1 fa-solid fa-chevron-left text-xs"></i>
+                                <span class="max-[400px]:hidden">Precedente</span>
+                            </x-link>
+                        @endif
+
+                        @if ($pagination['has_next'])
+                            <x-link :href="route(
+                                'assessments.index',
+                                array_merge(
+                                    [
+                                        'type' => $type,
+                                        'code' => $code,
+                                    ],
+                                    $baseQuery,
+                                    [
+                                        'page' => $pagination['current_page'] + 1,
+                                    ],
+                                ),
+                            )">
+                                <span class="max-[400px]:hidden">Successivo</span>
+                                <i class="ms-1 fa-solid fa-chevron-right text-xs"></i>
+                            </x-link>
+                            <x-link :href="route(
+                                'assessments.index',
+                                array_merge(
+                                    [
+                                        'type' => $type,
+                                        'code' => $code,
+                                    ],
+                                    $baseQuery,
+                                    [
+                                        'page' => $pagination['total_pages'],
+                                    ],
+                                ),
+                            )">
+                                <span class="max-[400px]:hidden">Fine</span>
+                                <i class="ms-1 fa-solid fa-angles-right text-xs"></i>
+                            </x-link>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>
