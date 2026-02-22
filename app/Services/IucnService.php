@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\DTOs\TaxonDetailDTO;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
@@ -52,21 +51,52 @@ class IucnService
     }
 
     /**
-     * Get the latest assessments for a given system.
+     * Get the latest assessments for a given system or country.
      */
-    public function getLatestAssessments(string $type, string $code): array
+    public function getLatestAssessments(string $type, string $code, int $page = 1, int $perPage = 18): array
     {
-        $cacheName = 'iucn_latest_' . $type . '_' . $code;
+        $page = max(1, $page);
+        $perPage = max(1, $perPage);
 
-        return Cache::remember($cacheName, 300, function () use ($type, $code) {
+        $cacheName = 'iucn_latest_' . $type . '_' . $code . '_page_' . $page . '_per_page_' . $perPage;
+
+        return Cache::remember($cacheName, 300, function () use ($type, $code, $page, $perPage) {
             $response = Http::withToken($this->token)
-                ->get("$this->baseUrl/$type/$code");
+                ->get("$this->baseUrl/$type/$code", [
+                    'page' => $page,
+                    'per_page' => $perPage,
+                ]);
 
             if ($response->successful()) {
-                return $response->json() ?? [];
+                $currentPage = (int) ($response->header('current-page') ?? $page);
+                $pageItems = (int) ($response->header('page-items') ?? $perPage);
+                $totalPages = (int) ($response->header('total-pages') ?? 1);
+                $totalCount = (int) ($response->header('total-count') ?? 0);
+
+                return [
+                    'data' => $response->json() ?? [],
+                    'pagination' => [
+                        'current_page' => max(1, $currentPage),
+                        'page_items' => max(1, $pageItems),
+                        'total_pages' => max(1, $totalPages),
+                        'total_count' => max(0, $totalCount),
+                        'has_prev' => $currentPage > 1,
+                        'has_next' => $currentPage < $totalPages,
+                    ],
+                ];
             }
 
-            return [];
+            return [
+                'data' => [],
+                'pagination' => [
+                    'current_page' => 1,
+                    'page_items' => $perPage,
+                    'total_pages' => 1,
+                    'total_count' => 0,
+                    'has_prev' => false,
+                    'has_next' => false,
+                ],
+            ];
         });
     }
 
@@ -109,7 +139,7 @@ class IucnService
     }
 
     /**
-     * Get the current version number of the IUCN Red List of Threatened Species API.
+     * Get API version, Red List version and species count data for the footer.
      */
     public function getFooterData(): array
     {
@@ -118,7 +148,7 @@ class IucnService
                 ->get("$this->baseUrl/information/api_version")
                 ->json();
 
-            usleep(300000);
+            usleep(300000); // Wait time as requested by responsible usage.
 
             $redListVersion = Http::withToken($this->token)
                 ->get("$this->baseUrl/information/red_list_version")
