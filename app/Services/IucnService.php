@@ -170,6 +170,7 @@ class IucnService
             'V' => 'VU',
             'I' => 'NE',
             'K' => 'DD',
+            "T" => "NT",
         ];
 
         // Iterate mapping.
