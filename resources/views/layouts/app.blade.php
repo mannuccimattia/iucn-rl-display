@@ -18,6 +18,8 @@
 </head>
 
 <body class="font-sans antialiased min-h-screen flex flex-col">
+    @include('layouts.page-loader')
+
     <div class="min-h-screen bg-main-dark flex flex-col flex-1">
         @include('layouts.navigation')
 
