@@ -20,8 +20,13 @@ class AssessmentController extends Controller
         $response = $result['data'];
         $pagination = $result['pagination'];
 
-        // Store $type and $code for backward navigation.
-        $metadata = array_first($response);
+        // Store $type and $code for backward navigation with safe fallbacks.
+        $metadata = [
+            'description' => [
+                'en' => data_get($response, 'description.en', strtoupper($code)),
+            ],
+            'code' => data_get($response, 'code', strtoupper($code)),
+        ];
 
         $assessments = $response['assessments'] ?? [];
 
@@ -51,7 +56,6 @@ class AssessmentController extends Controller
             ->all();
 
         // Map for legacy conservation codes.
-        // (Add code mapping here and code translation in ~/lang/it.json)
         $legacyMap = [
             'LR/lc' => 'LC',
             'LR/nt' => 'NT',
