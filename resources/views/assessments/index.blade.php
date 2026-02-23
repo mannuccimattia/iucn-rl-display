@@ -74,34 +74,45 @@
                     <div class="grid gap-4">
                         @foreach ($assessments as $assessment)
                             <x-list>
-                                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-center">
+                                <div class="grid gap-4">
                                     <div class="flex flex-col">
                                         <span class="text-[10px] uppercase opacity-50 font-bold">Nome scientifico</span>
                                         <span
                                             class="text-xl font-black">{{ $assessment['taxon_scientific_name'] }}</span>
                                     </div>
-                                    <div class="flex flex-col">
-                                        <span class="text-[10px] uppercase opacity-50 font-bold">Anno</span>
-                                        <span class="text-xl font-black">{{ $assessment['year_published'] }}</span>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="text-[10px] uppercase opacity-50 font-bold">Categoria</span>
-                                        <div class="flex items-center gap-2">
-                                            <span
-                                                class="text-xl font-black text-main-emphasis">{{ $assessment['red_list_category_code'] }}</span>
-                                            <span
-                                                class="text-xs truncate">({{ __($assessment['red_list_category_code']) }})</span>
+
+                                    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 items-start">
+                                        <div class="flex flex-col">
+                                            <span class="text-[10px] uppercase opacity-50 font-bold">Anno</span>
+                                            <span class="text-xl font-black">{{ $assessment['year_published'] }}</span>
                                         </div>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="text-[10px] uppercase opacity-50 font-bold">Possibile
-                                            Estinto</span>
-                                        <span
-                                            class="text-xl font-black">{{ $assessment['possibly_extinct'] ? 'SI' : 'NO' }}</span>
-                                    </div>
-                                    <div class="flex flex-col">
-                                        <span class="text-[10px] uppercase opacity-50 font-bold">ID Valutazione</span>
-                                        <span class="font-mono text-xl">#{{ $assessment['assessment_id'] }}</span>
+                                        <div class="flex flex-col">
+                                            <span class="text-[10px] uppercase opacity-50 font-bold">Categoria</span>
+                                            <div class="flex items-center gap-2">
+                                                <span
+                                                    class="text-xl font-black text-main-emphasis">{{ $assessment['red_list_category_code'] }}</span>
+                                                <span
+                                                    class="text-xs truncate">({{ __($assessment['red_list_category_code']) }})</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="text-[10px] uppercase opacity-50 font-bold">Possibile
+                                                Estinto</span>
+                                            <span
+                                                class="text-xl font-black">{{ $assessment['possibly_extinct'] ? 'SI' : 'NO' }}</span>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span
+                                                class="text-[10px] uppercase opacity-50 font-bold whitespace-nowrap">Possibile
+                                                Estinto In Natura</span>
+                                            <span
+                                                class="text-xl font-black">{{ $assessment['possibly_extinct_in_the_wild'] ? 'SI' : 'NO' }}</span>
+                                        </div>
+                                        <div class="flex flex-col">
+                                            <span class="text-[10px] uppercase opacity-50 font-bold">ID
+                                                Valutazione</span>
+                                            <span class="font-mono text-xl">#{{ $assessment['assessment_id'] }}</span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div
