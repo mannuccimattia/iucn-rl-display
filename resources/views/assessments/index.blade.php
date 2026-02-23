@@ -5,8 +5,6 @@
     $baseQuery = request()->except('page');
 @endphp
 
-{{-- @dd($assessments, $filters) --}}
-
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-main-contrast leading-tight">
