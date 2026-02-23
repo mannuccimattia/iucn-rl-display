@@ -32,7 +32,13 @@
 
                 <x-assessment-filters :view-mode="$viewMode" :filters="$filters" />
 
-                @if ($viewMode === 'card')
+                @if (empty($assessments))
+                    <div class="rounded-2xl border border-main-emphasis/20 bg-main-light p-6 text-center">
+                        <p class="text-4xl text-main-emphasis/70 font-black">(^-^*)</p>
+                        <p class="text-lg font-semibold">Nessun assessment trovato</p>
+                        <p class="mt-1 text-sm opacity-70">Prova a modificare i filtri di ricerca.</p>
+                    </div>
+                @elseif ($viewMode === 'card')
                     <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">
                         @foreach ($assessments as $assessment)
                             <x-card>
