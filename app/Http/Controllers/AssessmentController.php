@@ -14,23 +14,30 @@ class AssessmentController extends Controller
         $page = max(1, (int) $request->query('page', 1));
         $perPage = 18;
 
-        $result = $service->getLatestAssessments($type, $code, $page, $perPage);
+        $year = (string) $request->query('year_published');
+        $isExtinct = (string) $request->query('possibly_extinct');
+        $isExtinctWild = (string) $request->query('possibly_extinct_in_the_wild');
+
+        if ($year || $isExtinct || $isExtinctWild) {
+            $result = $service->getLatestAssessments($type, $code, $page, $perPage, $year, $isExtinct, $isExtinctWild);
+        } else {
+            $result = $service->getLatestAssessments($type, $code, $page, $perPage, null, null, null);
+        }
 
         // Split pagination metadata from response.
         $response = $result['data'];
         $pagination = $result['pagination'];
 
         // Store $type and $code for backward navigation with safe fallbacks.
-        $metadata = [
-            'description' => [
-                'en' => data_get($response, 'description.en', strtoupper($code)),
-            ],
-            'code' => data_get($response, 'code', strtoupper($code)),
-        ];
+        $metadata = array_first($response);
 
         $assessments = $response['assessments'] ?? [];
+        $filters = $response['filters'] ?? [];
 
-        return view('assessments.index', compact('metadata', 'assessments', 'pagination'));
+        // Map legacy conservation codes.
+        $assessments = $service->mapLegacyCodes($assessments);
+
+        return view('assessments.index', compact('metadata', 'assessments', 'filters', 'pagination'));
     }
 
     /** Display details of taxon given  it's id {sis_id}. */
@@ -55,21 +62,8 @@ class AssessmentController extends Controller
             ->values()
             ->all();
 
-        // Map for legacy conservation codes.
-        $legacyMap = [
-            'LR/lc' => 'LC',
-            'LR/nt' => 'NT',
-            'LR/cd' => 'NT',
-            'V' => 'VU',
-            'I' => 'NE',
-            'K' => 'DD',
-        ];
-
-        // Iterate mapping.
-        foreach ($assessments as &$assessment) {
-            $assessment['red_list_category_code'] = $legacyMap[$assessment['red_list_category_code']]
-                ?? $assessment['red_list_category_code'];
-        }
+        // Map legacy conservation codes.
+        $assessments = $service->mapLegacyCodes($assessments);
 
         return view('assessments.show', compact('metadata', 'taxon', 'assessments'));
     }

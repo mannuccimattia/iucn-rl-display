@@ -5,12 +5,14 @@
     $baseQuery = request()->except('page');
 @endphp
 
+{{-- @dd($assessments, $filters) --}}
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-main-contrast leading-tight">
             Visualizzazione per <span class="font-bold text-main-emphasis">
                 {{ $type === 'systems' ? 'Sistema: ' : 'Nazione: ' }}
-                {{ __($metadata['description']['en']) }}
+                {{ __($metadata['description']['en']) ?? $code }}
             </span>
         </h2>
     </x-slot>
@@ -27,6 +29,8 @@
                     </div>
                     <x-view-toggle :mode="$viewMode" />
                 </div>
+
+                <x-assessment-filters :view-mode="$viewMode" :filters="$filters" />
 
                 @if ($viewMode === 'card')
                     <div class="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-6">

@@ -53,23 +53,42 @@ class IucnService
     /**
      * Get the latest assessments for a given system or country.
      */
-    public function getLatestAssessments(string $type, string $code, int $page = 1, int $perPage = 18): array
-    {
+    public function getLatestAssessments(
+        string $type,
+        string $code,
+        int $page = 1,
+        int $perPage = 18,
+        string|null $year,
+        string|null $isExtinct,
+        string|null $isExtinctWild
+    ): array {
         $page = max(1, $page);
         $perPage = max(1, $perPage);
 
-        $cacheName = 'iucn_latest_' . $type . '_' . $code . '_page_' . $page . '_per_page_' . $perPage;
+        $filters = collect([
+            'year_published' => $year,
+            'possibly_extinct' => $isExtinct,
+            'possibly_extinct_in_the_wild' => $isExtinctWild,
+        ])->filter(fn($value) => $value !== null && trim((string) $value) !== '')
+            ->toArray();
 
-        return Cache::remember($cacheName, 300, function () use ($type, $code, $page, $perPage) {
+        $query = array_merge(
+            [
+                'page' => $page,
+                'per_page' => $perPage,
+            ],
+            $filters
+        );
+
+        $cacheName = 'iucn_latest_' . $type . '_' . $code . sha1(implode('_', $query));
+
+        return Cache::remember($cacheName, 300, function () use ($type, $code, $query) {
             $response = Http::withToken($this->token)
-                ->get("$this->baseUrl/$type/$code", [
-                    'page' => $page,
-                    'per_page' => $perPage,
-                ]);
+                ->get("$this->baseUrl/$type/$code", $query);
 
             if ($response->successful()) {
-                $currentPage = (int) ($response->header('current-page') ?? $page);
-                $pageItems = (int) ($response->header('page-items') ?? $perPage);
+                $currentPage = (int) ($response->header('current-page') ?? $query['page']);
+                $pageItems = (int) ($response->header('page-items') ?? $query['per_page']);
                 $totalPages = (int) ($response->header('total-pages') ?? 1);
                 $totalCount = (int) ($response->header('total-count') ?? 0);
 
@@ -90,7 +109,7 @@ class IucnService
                 'data' => [],
                 'pagination' => [
                     'current_page' => 1,
-                    'page_items' => $perPage,
+                    'page_items' => $query['per_page'],
                     'total_pages' => 1,
                     'total_count' => 0,
                     'has_prev' => false,
@@ -136,6 +155,32 @@ class IucnService
 
             return [];
         });
+    }
+
+    /**
+     * Map legacy conservation codes of supplied assessments.
+     */
+    public function mapLegacyCodes(array $assessments): array
+    {
+        // Map for legacy conservation codes.
+        $legacyMap = [
+            'LR/lc' => 'LC',
+            'LR/nt' => 'NT',
+            'LR/cd' => 'NT',
+            'V' => 'VU',
+            'I' => 'NE',
+            'K' => 'DD',
+        ];
+
+        // Iterate mapping.
+        foreach ($assessments as &$assessment) {
+            $assessment['red_list_category_code'] = $legacyMap[$assessment['red_list_category_code']]
+                ?? $assessment['red_list_category_code'];
+        }
+
+        unset($assessment);
+
+        return $assessments;
     }
 
     /**
