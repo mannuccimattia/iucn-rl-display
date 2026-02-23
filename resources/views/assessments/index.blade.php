@@ -155,7 +155,7 @@
                         @endif
                     </p>
 
-                    <div class="flex max-[400px]:justify-between justify-center sm:justify-normal items-center gap-5">
+                    <div class="flex max-sm:justify-between md:justify-normal items-center gap-5">
                         @if ($pagination['has_prev'])
                             <x-link :href="route(
                                 'assessments.index',
@@ -171,7 +171,7 @@
                                 ),
                             )">
                                 <i class="me-1 fa-solid fa-angles-left text-xs"></i>
-                                <span class="max-[400px]:hidden">Inizio</span>
+                                <span class="max-sm:hidden">Inizio</span>
                             </x-link>
                             <x-link :href="route(
                                 'assessments.index',
@@ -187,7 +187,7 @@
                                 ),
                             )">
                                 <i class="me-1 fa-solid fa-chevron-left text-xs"></i>
-                                <span class="max-[400px]:hidden">Precedente</span>
+                                <span class="max-sm:hidden">Precedente</span>
                             </x-link>
                         @endif
 
@@ -205,7 +205,7 @@
                                     ],
                                 ),
                             )">
-                                <span class="max-[400px]:hidden">Successivo</span>
+                                <span class="max-sm:hidden">Successivo</span>
                                 <i class="ms-1 fa-solid fa-chevron-right text-xs"></i>
                             </x-link>
                             <x-link :href="route(
@@ -221,7 +221,7 @@
                                     ],
                                 ),
                             )">
-                                <span class="max-[400px]:hidden">Fine</span>
+                                <span class="max-sm:hidden">Fine</span>
                                 <i class="ms-1 fa-solid fa-angles-right text-xs"></i>
                             </x-link>
                         @endif
